@@ -27,7 +27,7 @@ public:
     CircularLinkedList() : _tail(nullptr) {}
 
 	CircularLinkedList(const CircularLinkedList& list) : _tail(nullptr) {
-		if (list->empty()) {
+		if (list.empty()) {
 			return;
 		}
 
@@ -35,7 +35,7 @@ public:
 		do {
 			push_tail(ptr->value);
 			ptr = ptr->next;
-		} while (ptr != _tail->next);
+		} while (ptr != list._tail->next);
 	} 
 
 	CircularLinkedList(const size_t size) {};
@@ -44,9 +44,9 @@ public:
         if (this != &lst) {
             clear();
             if (!lst.empty()) {
-                Node* current = lst._tail->next;
+                Node<T>* current = lst._tail->next;
                 do {
-                    push_tail(current->data);
+                    push_tail(current->value);
                     current = current->next;
                 } while (current != lst._tail->next);
             }
@@ -68,21 +68,18 @@ public:
             return;
         }
 
-        Node<T>* current = _tail->next; // Указатель на первый элемент
+        Node<T>* current = _tail->next; 
         Node<T>* nextNode = nullptr;
 
-        while (current != _tail) { // Пока не дойдём до хвоста
-            nextNode = current->next; // Сохраняем следующий узел
-            std::cout << "Deleting node at address: " << current << std::endl;
-            delete current; // Удаляем текущий узел
-            current = nextNode; // Переходим к следующему узлу
+        while (current != _tail) {
+            nextNode = current->next;
+            delete current;
+            current = nextNode;
         }
 
-        // Удаляем последний узел (хвост)
-        std::cout << "Deleting node at address: " << current << std::endl;
         delete current;
 
-        _tail = nullptr; // Список теперь пуст
+        _tail = nullptr;
     }
 
     void push_tail(const T& value) {
@@ -99,14 +96,14 @@ public:
     }
 
     void push_tail(const CircularLinkedList<T>& list) {
-        if (list->empty())
+        if (list.empty())
             return; 
 
-        Node<T>* ptr = list->_tail->next;
+        Node<T>* ptr = list._tail->next;
         do {
             push_tail(ptr->value);
             ptr = ptr->next;
-        } while (ptr != list->_tail->next);
+        } while (ptr != list._tail->next);
     }
 
     void push_head(const T value) {
@@ -123,14 +120,14 @@ public:
     }
 
     void push_head(const CircularLinkedList<T>& list) {
-        if (list->empty())
+        if (list.empty())
             return;
 
-        Node<T>* ptr = list->_tail->next;
+        Node<T>* ptr = list._tail->next;
         do {
             push_head(ptr->value);
             ptr = ptr->next;
-        } while (ptr != list->_tail->next);
+        } while (ptr != list._tail->next);
     }
 
     void pop_head() {
@@ -168,31 +165,28 @@ public:
 
     void delete_node(const T& value) {
         if (empty()) {
-            return; 
+            return;
         }
+        Node<T>* ptr = _tail->next;
+        Node<T>* previous_ptr = _tail;
+        
 
-        Node<T>* current = _tail->next;
-        Node<T>* prev = _tail;
-
-  
         do {
-            if (current->value == value) {
-                Node<T>* to_delete = current;
-                prev->next = current->next;
+            if (ptr->value == value) {
+                Node<T>* to_delete = ptr;
+                ptr = ptr->next;
+                previous_ptr->next = ptr;
 
-
-                if (current == _tail) {
-                    _tail = (current == current->next) ? nullptr : prev; 
-                }
-
-                current = current->next;
-                delete to_delete;
             }
             else {
-                prev = current;
-                current = current->next;
+                previous_ptr = ptr;
+                ptr = ptr->next;
             }
-        } while (current != (_tail ? _tail->next : nullptr));
+        } while (ptr != _tail);
+
+        if (_tail->value == value) {
+            pop_tail();
+        }
 
     }
 
