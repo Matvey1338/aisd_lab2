@@ -123,11 +123,15 @@ public:
         if (list.empty())
             return;
 
-        Node<T>* ptr = list._tail->next;
+        Node<T>* ptr = list._tail;
+        Node<T>* previous_ptr = list._tail;
         do {
             push_head(ptr->value);
-            ptr = ptr->next;
-        } while (ptr != list._tail->next);
+            while (ptr->next != previous_ptr) {
+                ptr = ptr->next;
+            }
+            previous_ptr = ptr;
+        } while (ptr != list._tail);
     }
 
     void pop_head() {

@@ -73,6 +73,5 @@ int main()
 
 	cout << "list1.size(): " << list1.size() << endl;
 
-
 	return 0;
 }
