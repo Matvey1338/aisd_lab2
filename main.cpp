@@ -61,8 +61,8 @@ int main()
 	list6.push_head(41);
 	list6.delete_node(41);
 	cout << "delete_node in list6 for 41: " << list6 << endl;
-	list6.clear();
-	cout << list6 << endl;
+	//list6.clear();
+	//cout << list6 << endl;
 	list6.push_head(41);
 	cout << list6 << endl;
 	list6.delete_node(41);
@@ -73,5 +73,13 @@ int main()
 
 	cout << "list1.size(): " << list1.size() << endl;
 
+	cout <<  "----------------------" << endl;
+	list6.push_head(1);
+
+	cout << list6 << endl;
+	show_polynomial_list(list6);
+
+	int x = calc_x(list6, 4);
+	cout << "\nget x: " << x;
 	return 0;
 }

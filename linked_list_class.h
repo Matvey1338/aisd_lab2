@@ -1,6 +1,7 @@
 ﻿#pragma once 
 #include <iostream>
 #include <random>
+#include <cmath>
 
 using namespace std;
 
@@ -230,6 +231,11 @@ public:
         return size;
     }
 
+    template <typename T>
+    friend void show_polynomial_list(const CircularLinkedList<T>& list);
+
+    template <typename T>
+    friend T calc_x(const CircularLinkedList<T>& list, const T x);
 };
 
 template <typename T>
@@ -249,6 +255,7 @@ ostream& operator<<(ostream& a, const CircularLinkedList<T>& list) {
 
     return a;
 }
+
 
 template <>
 CircularLinkedList<int>::CircularLinkedList(size_t size) : _tail(nullptr) {
@@ -276,4 +283,57 @@ CircularLinkedList<double>::CircularLinkedList(size_t size) : _tail(nullptr) {
     for (int i = 0; i < size; i++) {
         this->push_tail(rand() + 0.00001 * rand());
     }
+}
+
+
+template <typename T>
+void show_polynomial_list(const CircularLinkedList<T>& list) {
+    if (list.empty()) {
+        throw out_of_range("Linked list is empty");
+    }
+
+    Node<T>* ptr = list._tail;
+    Node<T>* previous_ptr = list._tail;
+    size_t index = list.size() - 1;
+    if (index == 0) {
+        cout << list._tail->next->value;
+        return;
+    }
+    do {
+        if (ptr->value != 0) {
+            cout << ptr->value << "x^" << index;
+            if (index != 1) {
+                cout << " + ";
+            }
+        }
+        while (ptr->next != previous_ptr) {
+            ptr = ptr->next;
+        }
+        previous_ptr = ptr;
+        index--;
+    } while (ptr != list._tail->next);
+    if (list._tail->next->value != 0) {
+        cout << " + " << list._tail->next->value;
+    }
+}
+
+template <typename T>
+T calc_x(const CircularLinkedList<T>& list, const T x) {
+    T res = 0;
+    Node<T>* ptr = list._tail;
+    Node<T>* previous_ptr = list._tail;
+    size_t index = list.size() - 1;
+    if (index == 0) {
+        return ptr->value;
+    }
+    do {
+        res += ptr->value * pow(x, index);
+        while (ptr->next != previous_ptr) {
+            ptr = ptr->next;
+        }
+        previous_ptr = ptr;
+        index--;
+    } while (ptr != list._tail->next);
+    res += list._tail->next->value;
+    return res;
 }
