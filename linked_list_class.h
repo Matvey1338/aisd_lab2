@@ -337,3 +337,42 @@ T calc_x(const CircularLinkedList<T>& list, const T x) {
     res += list._tail->next->value;
     return res;
 }
+
+template <typename T>
+void fixed_show_polynomial_list(const CircularLinkedList<T>& list) {
+    if (list.empty()) {
+        throw out_of_range("Linked list is empty");
+    }
+
+    size_t index = list.size() - 1;
+    for (size_t i = 0; i < list.size(); i++) {
+        T value = list[i];
+        if (value != 0) {
+            cout << value;
+            if (index > 1) {
+                cout << "x^" << index << " + ";
+            }
+            if (index == 1) {
+                cout << "x" << endl;
+            }
+        }
+        index--;
+    }
+}
+
+
+template<typename T>
+T fixed_calc_x(const CircularLinkedList<T>& list, const T x) {
+    if (list.empty()) {
+        throw out_of_range("Linked list is empty");
+    }
+
+    T result = 0;
+    size_t index = list.size() - 1;
+    for (size_t i = 0; i < list.size(); i++) {
+        T value = list[i];
+        result += value * pow(x, index);
+        index--;
+    }
+    return result;
+}

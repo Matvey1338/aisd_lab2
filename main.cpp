@@ -77,9 +77,14 @@ int main()
 	list6.push_head(1);
 
 	cout << list6 << endl;
-	show_polynomial_list(list6);
+	CircularLinkedList<double> list9(3);
+	list9.push_tail(0);
+	cout << list9 << endl;
 
-	int x = calc_x(list6, 4);
+	fixed_show_polynomial_list(list9);
+
+	double x = fixed_calc_x(list9, 4.0);
+
 	cout << "\nget x: " << x;
 	return 0;
 }
